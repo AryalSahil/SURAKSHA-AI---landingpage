@@ -1,0 +1,6 @@
+{
+  "name": "SURAKSHA AI - Citizen Digital Safety & Scam Detection",
+  "description": "Think Before You Click. Check Before You Pay. SURAKSHA AI empowers Indian citizens to detect online scams, analyze suspicious messages, and navigate cyber safety in English, Hindi, and Assamese.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

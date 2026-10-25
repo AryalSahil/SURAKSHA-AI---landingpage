@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --brand-navy: #123B70;
+    --brand-blue: #2563EB;
+    --brand-bg: #F5F8FC;
+  }
+
+  body {
+    background-color: #F5F8FC;
+    color: #1e293b;
+    overflow-x: hidden;
+  }
+}
+
+/* Custom phone mockup screen reflections and styling */
+.phone-shadow {
+  box-shadow: 0 25px 60px -15px rgba(18, 59, 112, 0.25), 0 0 0 1px rgba(18, 59, 112, 0.08);
+}
+
+.card-hover {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px -8px rgba(37, 99, 235, 0.12);
+}
