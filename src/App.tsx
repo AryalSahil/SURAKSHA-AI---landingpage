@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import { SupportedLanguage } from './types';
 import { EmergencyBanner } from './components/EmergencyBanner';
 import { Navbar } from './components/Navbar';
@@ -114,6 +115,9 @@ export default function App() {
         isOpen={isChecklistModalOpen}
         onClose={() => setIsChecklistModalOpen(false)}
       />
+
+      {/* Vercel Web Analytics */}
+      <Analytics />
     </div>
   );
 }
