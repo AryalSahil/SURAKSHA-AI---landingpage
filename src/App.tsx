@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import { SupportedLanguage } from './types';
 import { EmergencyBanner } from './components/EmergencyBanner';
 import { Navbar } from './components/Navbar';
@@ -114,6 +115,9 @@ export default function App() {
         isOpen={isChecklistModalOpen}
         onClose={() => setIsChecklistModalOpen(false)}
       />
+
+      {/* Vercel Speed Insights */}
+      <SpeedInsights />
     </div>
   );
 }
