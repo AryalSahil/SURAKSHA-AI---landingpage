@@ -6,7 +6,7 @@
     "salt": "ba4b00724c48621fce04d9aea49dec57",
     "role": "superadmin",
     "name": "SURAKSHA Security Lead",
-    "lastLoginAt": "2026-10-26T19:50:00.529Z"
+    "lastLoginAt": "2026-10-26T20:36:45.391Z"
   },
   "sessions": {
     "43a277e8c28523bbc0e53007d71df9181b2454dea24a870b11d3f2ce184e74f9": {
@@ -16,6 +16,22 @@
       "role": "superadmin",
       "createdAt": "2026-10-26T19:50:00.529Z",
       "expiresAt": "2026-10-27T03:50:00.529Z"
+    },
+    "86ee68b4a695edd06eeb3d48bc3910fe983b87cac678913e36c46e4b28afc6d6": {
+      "token": "86ee68b4a695edd06eeb3d48bc3910fe983b87cac678913e36c46e4b28afc6d6",
+      "userId": "admin-01",
+      "username": "admin",
+      "role": "superadmin",
+      "createdAt": "2026-10-26T20:36:10.067Z",
+      "expiresAt": "2026-10-27T04:36:10.067Z"
+    },
+    "ac83aa32710ebdd767f35f19db18453058b3fc980437a2f1cbb455f817e08eca": {
+      "token": "ac83aa32710ebdd767f35f19db18453058b3fc980437a2f1cbb455f817e08eca",
+      "userId": "admin-01",
+      "username": "admin",
+      "role": "superadmin",
+      "createdAt": "2026-10-26T20:36:45.391Z",
+      "expiresAt": "2026-10-27T04:36:45.391Z"
     }
   },
   "siteSettings": {
@@ -171,6 +187,31 @@
     }
   ],
   "activityLogs": [
+    {
+      "id": "log-1793047005391-6s3kw",
+      "timestamp": "2026-10-26T20:36:45.391Z",
+      "action": "ADMIN_LOGIN",
+      "username": "admin",
+      "details": "Administrative sign-in established via secure cookie session.",
+      "status": "success"
+    },
+    {
+      "id": "log-1793046970067-809cj",
+      "timestamp": "2026-10-26T20:36:10.067Z",
+      "action": "ADMIN_LOGIN",
+      "username": "admin",
+      "details": "Administrative sign-in established via secure cookie session.",
+      "status": "success"
+    },
+    {
+      "id": "log-1793044982399-p1z7r",
+      "timestamp": "2026-10-26T20:03:02.399Z",
+      "action": "ADMIN_LOGIN_FAILED",
+      "username": "admin",
+      "details": "Failed credential attempt from IP: 127.0.0.1",
+      "status": "error",
+      "ipAddress": "127.0.0.1"
+    },
     {
       "id": "log-1793044200529-0ud9o",
       "timestamp": "2026-10-26T19:50:00.529Z",

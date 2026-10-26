@@ -14,6 +14,9 @@ const app = express();
 const PORT = Number(process.env.PORT) || 3000;
 const isProd = process.env.NODE_ENV === 'production';
 
+// Support proxy headers in containerized/Cloud Run environments
+app.set('trust proxy', 1);
+
 app.use(express.json());
 app.use(cookieParser());
 
@@ -154,11 +157,11 @@ app.post('/api/admin/login', (req: Request, res: Response) => {
 
   const session = storeManager.createSession(username.trim());
 
-  // Set HTTP-only secure session cookie
+  // Set HTTP-only secure session cookie compatible with both standalone and iframe previews
   res.cookie('suraksha_admin_token', session.token, {
     httpOnly: true,
     secure: isProd,
-    sameSite: 'lax',
+    sameSite: isProd ? 'none' : 'lax',
     maxAge: (storeManager.getStore().siteSettings.sessionTimeoutHours || 8) * 3600 * 1000,
     path: '/',
   });
@@ -175,11 +178,13 @@ app.post('/api/admin/login', (req: Request, res: Response) => {
   });
 });
 
-// 4. Admin Logout
-app.post('/api/admin/logout', requireAdminAuth, (req: Request, res: Response) => {
-  const session = (req as any).adminSession;
-  if (session?.token) {
-    storeManager.removeSession(session.token);
+// 4. Admin Logout (Resilient: never fails if already unauthenticated)
+app.post('/api/admin/logout', (req: Request, res: Response) => {
+  const token = req.cookies?.suraksha_admin_token || 
+    (req.headers.authorization?.startsWith('Bearer ') ? req.headers.authorization.split(' ')[1] : undefined);
+
+  if (token) {
+    storeManager.removeSession(token);
   }
 
   res.clearCookie('suraksha_admin_token', { path: '/' });

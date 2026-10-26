@@ -16,6 +16,7 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { useRouter } from '../../context/RouterContext';
+import { apiFetch, removeAdminToken } from '../../utils/api';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -29,16 +30,10 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children, activeTab })
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    // Verify server session
-    fetch('/api/admin/me')
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error('Not authenticated');
-        }
-        return res.json();
-      })
+    // Verify server session safely via apiFetch
+    apiFetch('/api/admin/me')
       .then((data) => {
-        if (data.authenticated && data.user) {
+        if (data?.authenticated && data?.user) {
           setAdminUser(data.user);
         } else {
           navigate('/admin/login');
@@ -52,10 +47,11 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children, activeTab })
 
   const handleLogout = async () => {
     try {
-      await fetch('/api/admin/logout', { method: 'POST' });
+      await apiFetch('/api/admin/logout', { method: 'POST' });
     } catch (e) {
-      console.warn('Logout network error:', e);
+      console.warn('Logout network notice:', e);
     }
+    removeAdminToken();
     navigate('/admin/login');
   };
 

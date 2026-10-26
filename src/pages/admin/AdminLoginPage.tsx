@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { ShieldCheck, Lock, User, AlertCircle, ArrowRight, ShieldAlert, KeyRound } from 'lucide-react';
+import { Lock, User, AlertCircle, ArrowRight, KeyRound } from 'lucide-react';
 import { useRouter } from '../../context/RouterContext';
+import { apiFetch, setAdminToken } from '../../utils/api';
 
 export const AdminLoginPage: React.FC = () => {
   const { navigate } = useRouter();
@@ -10,14 +11,8 @@ export const AdminLoginPage: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    // If already authenticated, redirect to /admin
-    fetch('/api/admin/me')
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return null;
-      })
+    // If already authenticated with a valid session, redirect to /admin
+    apiFetch('/api/admin/me')
       .then((data) => {
         if (data?.authenticated) {
           navigate('/admin');
@@ -39,31 +34,28 @@ export const AdminLoginPage: React.FC = () => {
     setError(null);
 
     try {
-      const response = await fetch('/api/admin/login', {
+      const data = await apiFetch('/api/admin/login', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: username.trim(), password }),
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Authentication failed. Please verify credentials.');
+      if (data?.token) {
+        setAdminToken(data.token);
       }
 
-      // Successful login
+      // Successful login - navigate to dashboard
       navigate('/admin');
     } catch (err: any) {
-      setError(err.message || 'Unable to authenticate. Please try again.');
+      // User-friendly error message, avoiding low-level browser JSON exceptions
+      const msg = err?.message || '';
+      if (msg.includes('Unexpected end of JSON') || msg.includes('Failed to execute')) {
+        setError('Connection interrupted. Please verify credentials and retry.');
+      } else {
+        setError(msg || 'Unable to authenticate. Please check credentials.');
+      }
     } finally {
       setSubmitting(false);
     }
-  };
-
-  const handleFillDemo = () => {
-    setUsername('admin');
-    setPassword('SurakshaSecure@2026');
-    setError(null);
   };
 
   return (
@@ -119,7 +111,7 @@ export const AdminLoginPage: React.FC = () => {
                   placeholder="admin"
                   required
                   autoComplete="username"
-                  className="w-full pl-10 pr-4 py-3 bg-[#0A192F]/80 border border-blue-900/60 rounded-xl text-white text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  className="w-full pl-10 pr-4 py-3 bg-[#0A192F]/80 border border-blue-900/60 rounded-xl text-white text-sm placeholder-slate-500 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 />
               </div>
             </div>
@@ -139,7 +131,7 @@ export const AdminLoginPage: React.FC = () => {
                   placeholder="••••••••••••••••"
                   required
                   autoComplete="current-password"
-                  className="w-full pl-10 pr-4 py-3 bg-[#0A192F]/80 border border-blue-900/60 rounded-xl text-white text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  className="w-full pl-10 pr-4 py-3 bg-[#0A192F]/80 border border-blue-900/60 rounded-xl text-white text-sm placeholder-slate-500 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 />
               </div>
             </div>
@@ -162,25 +154,6 @@ export const AdminLoginPage: React.FC = () => {
               )}
             </button>
           </form>
-
-          {/* Quick Demo Credentials Helper */}
-          <div className="mt-6 pt-5 border-t border-blue-800/30">
-            <div className="flex items-center justify-between text-xs text-slate-400 mb-2">
-              <span>Demo / Hackathon Evaluation Access:</span>
-              <button
-                type="button"
-                onClick={handleFillDemo}
-                className="text-cyan-400 hover:text-cyan-300 font-semibold underline underline-offset-2 transition-colors cursor-pointer"
-              >
-                Auto-fill
-              </button>
-            </div>
-            <div className="bg-[#0A192F]/60 rounded-lg p-2.5 border border-blue-900/40 text-xs font-mono text-slate-300 flex items-center justify-between">
-              <span>admin</span>
-              <span className="text-slate-500">/</span>
-              <span>SurakshaSecure@2026</span>
-            </div>
-          </div>
         </div>
 
         {/* Footer info & return link */}
@@ -192,7 +165,7 @@ export const AdminLoginPage: React.FC = () => {
             ← Return to Public Website
           </button>
           <p className="text-[11px] text-slate-500 mt-3">
-            Protected system. All administrator actions, logins, and status changes are permanently logged to the audit log.
+            Protected system. All administrator actions and changes are securely audited.
           </p>
         </div>
       </div>

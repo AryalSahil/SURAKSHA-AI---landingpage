@@ -10,6 +10,7 @@ import {
   Smartphone,
   ExternalLink
 } from 'lucide-react';
+import { apiFetch } from '../utils/api';
 
 export const ContactPage: React.FC = () => {
   const [name, setName] = useState('');
@@ -34,9 +35,8 @@ export const ContactPage: React.FC = () => {
     setErrorMsg(null);
 
     try {
-      const res = await fetch('/api/public/feedback', {
+      const data = await apiFetch('/api/public/feedback', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: name.trim() || undefined,
           email: email.trim() || undefined,
@@ -47,18 +47,17 @@ export const ContactPage: React.FC = () => {
         }),
       });
 
-      const data = await res.json();
-      if (res.ok && data.success) {
+      if (data?.success) {
         setSubmittedId(data.id);
         setMessage('');
         setName('');
         setEmail('');
         setDevice('');
       } else {
-        setErrorMsg(data.error || 'Failed to submit report. Please try again.');
+        setErrorMsg(data?.error || 'Failed to submit report. Please try again.');
       }
-    } catch {
-      setErrorMsg('Network error. Please check your connection and retry.');
+    } catch (err: any) {
+      setErrorMsg(err?.message || 'Network error. Please check your connection and retry.');
     } finally {
       setLoading(false);
     }

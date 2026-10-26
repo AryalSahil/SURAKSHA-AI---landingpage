@@ -16,6 +16,7 @@ import {
   Info
 } from 'lucide-react';
 import { useRouter } from '../context/RouterContext';
+import { apiFetch } from '../utils/api';
 
 export const DownloadPage: React.FC = () => {
   const { navigate } = useRouter();
@@ -44,10 +45,9 @@ export const DownloadPage: React.FC = () => {
   const [notifyStatus, setNotifyStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   useEffect(() => {
-    fetch('/api/public/config')
-      .then((res) => res.json())
+    apiFetch('/api/public/config')
       .then((data) => {
-        if (data.releaseInfo) {
+        if (data?.releaseInfo) {
           setReleaseConfig(data.releaseInfo);
         }
       })

@@ -15,6 +15,7 @@ import {
   Zap
 } from 'lucide-react';
 import { useRouter } from '../../context/RouterContext';
+import { apiFetch } from '../../utils/api';
 
 export const AdminOverviewPage: React.FC = () => {
   const { navigate } = useRouter();
@@ -27,11 +28,7 @@ export const AdminOverviewPage: React.FC = () => {
     if (isManual) setRefreshing(true);
     setActionError(null);
     try {
-      const res = await fetch('/api/admin/overview');
-      if (!res.ok) {
-        throw new Error('Failed to load overview data');
-      }
-      const json = await res.json();
+      const json = await apiFetch('/api/admin/overview');
       setData(json);
     } catch (err: any) {
       setActionError(err.message || 'Error communicating with server');
@@ -49,12 +46,10 @@ export const AdminOverviewPage: React.FC = () => {
     if (!data?.siteSettings) return;
     const newStatus = !data.siteSettings.maintenanceMode;
     try {
-      const res = await fetch('/api/admin/settings', {
+      await apiFetch('/api/admin/settings', {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ maintenanceMode: newStatus }),
       });
-      if (!res.ok) throw new Error('Failed to update maintenance mode');
       fetchOverview();
     } catch (err: any) {
       alert(err.message);
@@ -65,12 +60,10 @@ export const AdminOverviewPage: React.FC = () => {
     if (!data?.releaseInfo) return;
     const newStatus = !data.releaseInfo.isPublished;
     try {
-      const res = await fetch('/api/admin/releases', {
+      await apiFetch('/api/admin/releases', {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ isPublished: newStatus }),
       });
-      if (!res.ok) throw new Error('Failed to update release publication');
       fetchOverview();
     } catch (err: any) {
       alert(err.message);

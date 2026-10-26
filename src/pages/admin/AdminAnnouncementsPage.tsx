@@ -11,6 +11,7 @@ import {
   X,
   Megaphone
 } from 'lucide-react';
+import { apiFetch } from '../../utils/api';
 
 interface Announcement {
   id: string;
@@ -38,9 +39,7 @@ export const AdminAnnouncementsPage: React.FC = () => {
 
   const fetchAnnouncements = async () => {
     try {
-      const res = await fetch('/api/admin/announcements');
-      if (!res.ok) throw new Error('Failed to load announcements');
-      const data = await res.json();
+      const data = await apiFetch('/api/admin/announcements');
       setAnnouncements(data.announcements || []);
     } catch (err: any) {
       setStatusMessage({ type: 'error', text: err.message || 'Error fetching announcements' });
@@ -55,12 +54,10 @@ export const AdminAnnouncementsPage: React.FC = () => {
 
   const handleToggle = async (id: string, currentStatus: boolean) => {
     try {
-      const res = await fetch(`/api/admin/announcements/${id}`, {
+      await apiFetch(`/api/admin/announcements/${id}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ isPublished: !currentStatus }),
       });
-      if (!res.ok) throw new Error('Failed to update announcement');
       fetchAnnouncements();
       setStatusMessage({
         type: 'success',
@@ -74,10 +71,9 @@ export const AdminAnnouncementsPage: React.FC = () => {
   const handleDelete = async (id: string, titleStr: string) => {
     if (!confirm(`Are you sure you want to delete bulletin "${titleStr}"?`)) return;
     try {
-      const res = await fetch(`/api/admin/announcements/${id}`, {
+      await apiFetch(`/api/admin/announcements/${id}`, {
         method: 'DELETE',
       });
-      if (!res.ok) throw new Error('Failed to delete announcement');
       fetchAnnouncements();
       setStatusMessage({
         type: 'success',
@@ -97,9 +93,8 @@ export const AdminAnnouncementsPage: React.FC = () => {
 
     setSubmitting(true);
     try {
-      const res = await fetch('/api/admin/announcements', {
+      await apiFetch('/api/admin/announcements', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           title: title.trim(),
           severity,
@@ -108,8 +103,6 @@ export const AdminAnnouncementsPage: React.FC = () => {
           isPublished,
         }),
       });
-
-      if (!res.ok) throw new Error('Failed to create announcement');
       
       setTitle('');
       setSummary('');

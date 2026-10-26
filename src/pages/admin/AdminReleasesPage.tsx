@@ -13,6 +13,7 @@ import {
   Info
 } from 'lucide-react';
 import { useRouter } from '../../context/RouterContext';
+import { apiFetch } from '../../utils/api';
 
 export const AdminReleasesPage: React.FC = () => {
   const { navigate } = useRouter();
@@ -33,9 +34,7 @@ export const AdminReleasesPage: React.FC = () => {
 
   const fetchRelease = async () => {
     try {
-      const res = await fetch('/api/admin/releases');
-      if (!res.ok) throw new Error('Failed to load release info');
-      const data = await res.json();
+      const data = await apiFetch('/api/admin/releases');
       const r = data.releaseInfo;
       setReleaseInfo(r);
       setIsPublished(r.isPublished || false);
@@ -63,9 +62,8 @@ export const AdminReleasesPage: React.FC = () => {
     setStatusMessage(null);
 
     try {
-      const res = await fetch('/api/admin/releases', {
+      await apiFetch('/api/admin/releases', {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           isPublished,
           version,
@@ -77,9 +75,6 @@ export const AdminReleasesPage: React.FC = () => {
           notes,
         }),
       });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to update release');
 
       setStatusMessage({
         type: 'success',

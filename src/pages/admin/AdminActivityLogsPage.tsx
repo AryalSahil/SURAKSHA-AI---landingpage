@@ -10,6 +10,7 @@ import {
   AlertCircle,
   FileText
 } from 'lucide-react';
+import { apiFetch } from '../../utils/api';
 
 interface ActivityLog {
   id: string;
@@ -29,9 +30,7 @@ export const AdminActivityLogsPage: React.FC = () => {
 
   const fetchLogs = async () => {
     try {
-      const res = await fetch('/api/admin/activity-logs?limit=200');
-      if (!res.ok) throw new Error('Failed to load logs');
-      const data = await res.json();
+      const data = await apiFetch('/api/admin/activity-logs?limit=200');
       setLogs(data.logs || []);
     } catch (err: any) {
       console.error(err);

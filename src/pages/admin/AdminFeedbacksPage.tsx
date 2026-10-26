@@ -11,6 +11,7 @@ import {
   ShieldCheck,
   CheckCircle2
 } from 'lucide-react';
+import { apiFetch } from '../../utils/api';
 
 interface FeedbackItem {
   id: string;
@@ -31,9 +32,7 @@ export const AdminFeedbacksPage: React.FC = () => {
 
   const fetchFeedbacks = async () => {
     try {
-      const res = await fetch('/api/admin/feedbacks');
-      if (!res.ok) throw new Error('Failed to load citizen feedback');
-      const data = await res.json();
+      const data = await apiFetch('/api/admin/feedbacks');
       setFeedbacks(data.feedbacks || []);
     } catch (err: any) {
       console.error(err);

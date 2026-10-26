@@ -12,6 +12,7 @@ import {
   Zap,
   Lock
 } from 'lucide-react';
+import { apiFetch } from '../../utils/api';
 
 export const AdminSettingsPage: React.FC = () => {
   const [settings, setSettings] = useState<any>(null);
@@ -29,9 +30,7 @@ export const AdminSettingsPage: React.FC = () => {
 
   const fetchSettings = async () => {
     try {
-      const res = await fetch('/api/admin/settings');
-      if (!res.ok) throw new Error('Failed to load settings');
-      const data = await res.json();
+      const data = await apiFetch('/api/admin/settings');
       const s = data.settings;
       setSettings(s);
       setMaintenanceMode(s.maintenanceMode || false);
@@ -57,9 +56,8 @@ export const AdminSettingsPage: React.FC = () => {
     setStatusMessage(null);
 
     try {
-      const res = await fetch('/api/admin/settings', {
+      await apiFetch('/api/admin/settings', {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           maintenanceMode,
           maintenanceMessage,
@@ -69,9 +67,6 @@ export const AdminSettingsPage: React.FC = () => {
           sessionTimeoutHours: Number(sessionTimeoutHours),
         }),
       });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to update settings');
 
       setStatusMessage({
         type: 'success',

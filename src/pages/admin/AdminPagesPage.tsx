@@ -11,6 +11,7 @@ import {
   Clock
 } from 'lucide-react';
 import { useRouter } from '../../context/RouterContext';
+import { apiFetch } from '../../utils/api';
 
 interface PageItem {
   id: string;
@@ -31,9 +32,7 @@ export const AdminPagesPage: React.FC = () => {
 
   const fetchPages = async () => {
     try {
-      const res = await fetch('/api/admin/pages');
-      if (!res.ok) throw new Error('Failed to load pages');
-      const data = await res.json();
+      const data = await apiFetch('/api/admin/pages');
       setPages(data.pages || []);
     } catch (err: any) {
       setMessage({ type: 'error', text: err.message || 'Error fetching pages' });
@@ -52,16 +51,10 @@ export const AdminPagesPage: React.FC = () => {
     const newStatus = !page.isPublished;
 
     try {
-      const res = await fetch(`/api/admin/pages/${page.id}`, {
+      await apiFetch(`/api/admin/pages/${page.id}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ isPublished: newStatus }),
       });
-
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || 'Failed to update page status');
-      }
 
       setPages((prev) =>
         prev.map((p) => (p.id === page.id ? { ...p, isPublished: newStatus, lastModified: new Date().toISOString() } : p))
