@@ -1,0 +1,191 @@
+{
+  "adminUser": {
+    "id": "admin-01",
+    "username": "admin",
+    "passwordHash": "3d8acb7cd2940657120fe0ebbf4627947cbc854d95fa3eaa88e92dfcd74e75a6039f9f3c998772e0f4a021db7f3aef10932ec0392c38696b16a3c54ba6080bb3",
+    "salt": "ba4b00724c48621fce04d9aea49dec57",
+    "role": "superadmin",
+    "name": "SURAKSHA Security Lead",
+    "lastLoginAt": "2026-10-26T19:50:00.529Z"
+  },
+  "sessions": {
+    "43a277e8c28523bbc0e53007d71df9181b2454dea24a870b11d3f2ce184e74f9": {
+      "token": "43a277e8c28523bbc0e53007d71df9181b2454dea24a870b11d3f2ce184e74f9",
+      "userId": "admin-01",
+      "username": "admin",
+      "role": "superadmin",
+      "createdAt": "2026-10-26T19:50:00.529Z",
+      "expiresAt": "2026-10-27T03:50:00.529Z"
+    }
+  },
+  "siteSettings": {
+    "siteName": "SURAKSHA AI",
+    "emergencyHelpline": "1930",
+    "portalUrl": "https://cybercrime.gov.in",
+    "supportEmail": "nodal@suraksha-ai.org",
+    "maintenanceMode": false,
+    "maintenanceMessage": "SURAKSHA AI is undergoing scheduled maintenance. Please dial national helpline 1930 for any urgent financial cyber fraud reports.",
+    "sessionTimeoutHours": 8
+  },
+  "releaseInfo": {
+    "version": "v1.0.0-beta.2",
+    "channel": "Beta / Sideload Evaluation",
+    "isPublished": false,
+    "fileSize": "18.2 MB",
+    "minAndroid": "Android 8.0 & Above",
+    "releaseDate": "October 2026",
+    "checksum": "SHA-256: 8a9f3b4c92...e61d",
+    "apkDownloadUrl": "",
+    "notes": "Build undergoing Google Play Protect compliance screening and CERT-In citizen safety review. Direct download will activate once the package hash is signed.",
+    "testedDevices": [
+      "Redmi Note 12 / 13 (MIUI 14)",
+      "Samsung Galaxy M34 / A54 (One UI 6)",
+      "OnePlus Nord CE 3 (OxygenOS 14)",
+      "Realme Narzo 60",
+      "Vivo T2 5G"
+    ]
+  },
+  "pages": [
+    {
+      "id": "home",
+      "slug": "/",
+      "title": "Home",
+      "description": "First line of defence against online scams for Indian citizens.",
+      "category": "public",
+      "isPublished": true,
+      "lastUpdated": "2026-10-26T19:48:20.274Z"
+    },
+    {
+      "id": "features",
+      "slug": "/features",
+      "title": "Features",
+      "description": "Multi-signal scam check, URL analysis, and regional language support.",
+      "category": "public",
+      "isPublished": true,
+      "lastUpdated": "2026-10-26T19:48:20.274Z"
+    },
+    {
+      "id": "how-it-works",
+      "slug": "/how-it-works",
+      "title": "How It Works",
+      "description": "Three simple steps: Check, Understand, and Act Safely.",
+      "category": "public",
+      "isPublished": true,
+      "lastUpdated": "2026-10-26T19:48:20.274Z"
+    },
+    {
+      "id": "download",
+      "slug": "/download",
+      "title": "Download App",
+      "description": "Android APK direct distribution and sideloading instructions.",
+      "category": "utility",
+      "isPublished": true,
+      "lastUpdated": "2026-10-26T19:48:20.274Z"
+    },
+    {
+      "id": "learn",
+      "slug": "/learn",
+      "title": "Cyber Safety & Learn",
+      "description": "Interactive fraud prevention modules, case studies, and safety rules.",
+      "category": "public",
+      "isPublished": true,
+      "lastUpdated": "2026-10-26T19:48:20.274Z"
+    },
+    {
+      "id": "about",
+      "slug": "/about",
+      "title": "About the Project",
+      "description": "Citizen-focused digital safety initiative for national hackathon.",
+      "category": "public",
+      "isPublished": true,
+      "lastUpdated": "2026-10-26T19:48:20.274Z"
+    },
+    {
+      "id": "faq",
+      "slug": "/faq",
+      "title": "Frequently Asked Questions",
+      "description": "Privacy safeguards, 1930 reporting guidance, and app functionality.",
+      "category": "public",
+      "isPublished": true,
+      "lastUpdated": "2026-10-26T19:48:20.274Z"
+    },
+    {
+      "id": "contact",
+      "slug": "/contact",
+      "title": "Contact & Feedback",
+      "description": "Community feedback submission, scam pattern reports, and inquiries.",
+      "category": "utility",
+      "isPublished": true,
+      "lastUpdated": "2026-10-26T19:48:20.274Z"
+    },
+    {
+      "id": "privacy",
+      "slug": "/privacy",
+      "title": "Privacy Policy",
+      "description": "Strict zero-storage policy, no banking data retention, transparent data handling.",
+      "category": "legal",
+      "isPublished": true,
+      "lastUpdated": "2026-10-26T19:48:20.274Z"
+    },
+    {
+      "id": "terms",
+      "slug": "/terms",
+      "title": "Terms of Use",
+      "description": "Educational safety tool disclaimer, non-legal advice, public good scope.",
+      "category": "legal",
+      "isPublished": true,
+      "lastUpdated": "2026-10-26T19:48:20.274Z"
+    }
+  ],
+  "announcements": [
+    {
+      "id": "advisory-01",
+      "title": "Advisory: Fake Electricity Bill Cutoff WhatsApp APK Campaigns",
+      "severity": "critical",
+      "category": "Active Threat Alert",
+      "summary": "Cyber fraudsters are circulating malicious .apk attachments pretending to be state discom updates (Mahavitaran, BESCOM, UPPCL). Do not install .apk files received via SMS or WhatsApp.",
+      "publishedAt": "2026-10-24T10:00:00.000Z",
+      "isPublished": true
+    },
+    {
+      "id": "advisory-02",
+      "title": "Precaution: Deceptive UPI \"Receive Money\" QR Codes on Second-Hand Portals",
+      "severity": "warning",
+      "category": "UPI Fraud Alert",
+      "summary": "Never enter your UPI PIN to receive money. Typing your PIN always transfers funds OUT of your account.",
+      "publishedAt": "2026-10-20T14:30:00.000Z",
+      "isPublished": true
+    }
+  ],
+  "feedbacks": [
+    {
+      "id": "fb-demo-01",
+      "name": "Amit Verma",
+      "email": "amit.v@gmail.com",
+      "category": "New Scam Pattern",
+      "device": "Samsung Galaxy M34",
+      "rating": 5,
+      "message": "Received a fake job offer on Telegram offering ₹3000/day for liking YouTube videos, asked for ₹500 fee. Please flag this pattern in the app.",
+      "createdAt": "2026-10-25T08:15:00.000Z",
+      "status": "reviewed"
+    }
+  ],
+  "activityLogs": [
+    {
+      "id": "log-1793044200529-0ud9o",
+      "timestamp": "2026-10-26T19:50:00.529Z",
+      "action": "ADMIN_LOGIN",
+      "username": "admin",
+      "details": "Administrative sign-in established via secure cookie session.",
+      "status": "success"
+    },
+    {
+      "id": "log-init",
+      "timestamp": "2026-10-26T19:48:20.274Z",
+      "action": "SYSTEM_BOOTSTRAP",
+      "username": "system",
+      "details": "SURAKSHA AI Administration datastore initialized with secure defaults.",
+      "status": "success"
+    }
+  ]
+}

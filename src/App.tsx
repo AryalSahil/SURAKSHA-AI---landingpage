@@ -1,105 +1,178 @@
 import React, { useState } from 'react';
+import { RouterProvider, useRouter } from './context/RouterContext';
 import { SupportedLanguage } from './types';
+
+// Public Chrome Components
 import { EmergencyBanner } from './components/EmergencyBanner';
 import { Navbar } from './components/Navbar';
-import { HeroSection } from './components/HeroSection';
-import { ApkDownloadSection } from './components/ApkDownloadSection';
-import { ThreatLandscapeSection } from './components/ThreatLandscapeSection';
-import { FeatureShowcaseSection } from './components/FeatureShowcaseSection';
-import { HowItWorksSection } from './components/HowItWorksSection';
-import { AppPreviewSection } from './components/AppPreviewSection';
-import { LanguageAccessibilitySection } from './components/LanguageAccessibilitySection';
-import { ResponsibleSafetySection } from './components/ResponsibleSafetySection';
-import { AboutProjectSection } from './components/AboutProjectSection';
-import { FaqSection } from './components/FaqSection';
-import { FeedbackBanner } from './components/FeedbackBanner';
 import { Footer } from './components/Footer';
 import { InstallationModal, FeedbackModal, SafetyChecklistModal } from './components/Modals';
 
-export default function App() {
+// Public Pages
+import { HomePage } from './pages/HomePage';
+import { FeaturesPage } from './pages/FeaturesPage';
+import { HowItWorksPage } from './pages/HowItWorksPage';
+import { DownloadPage } from './pages/DownloadPage';
+import { LearnPage } from './pages/LearnPage';
+import { AboutPage } from './pages/AboutPage';
+import { FaqPage } from './pages/FaqPage';
+import { ContactPage } from './pages/ContactPage';
+import { PrivacyPage } from './pages/PrivacyPage';
+import { TermsPage } from './pages/TermsPage';
+import { NotFoundPage } from './pages/NotFoundPage';
+
+// Admin Components & Pages
+import { AdminLayout } from './pages/admin/AdminLayout';
+import { AdminLoginPage } from './pages/admin/AdminLoginPage';
+import { AdminOverviewPage } from './pages/admin/AdminOverviewPage';
+import { AdminPagesPage } from './pages/admin/AdminPagesPage';
+import { AdminReleasesPage } from './pages/admin/AdminReleasesPage';
+import { AdminAnnouncementsPage } from './pages/admin/AdminAnnouncementsPage';
+import { AdminFeedbacksPage } from './pages/admin/AdminFeedbacksPage';
+import { AdminActivityLogsPage } from './pages/admin/AdminActivityLogsPage';
+import { AdminSettingsPage } from './pages/admin/AdminSettingsPage';
+
+function AppContent() {
+  const { currentPath, isAdminRoute, navigate } = useRouter();
   const [currentLang, setCurrentLang] = useState<SupportedLanguage>('en');
   const [isInstallModalOpen, setIsInstallModalOpen] = useState(false);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const [isChecklistModalOpen, setIsChecklistModalOpen] = useState(false);
 
-  const handleLanguageChange = (lang: SupportedLanguage) => {
-    setCurrentLang(lang);
-  };
+  // Normalize path by stripping trailing slash (except root)
+  const normalizedPath = currentPath.length > 1 && currentPath.endsWith('/') 
+    ? currentPath.slice(0, -1) 
+    : currentPath;
 
-  const handleScrollToDownload = () => {
-    const el = document.getElementById('download');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
+  // 1. ADMIN ROUTING BRANCH
+  if (isAdminRoute) {
+    if (normalizedPath === '/admin/login') {
+      return <AdminLoginPage />;
+    }
+
+    if (normalizedPath === '/admin') {
+      return (
+        <AdminLayout activeTab="overview">
+          <AdminOverviewPage />
+        </AdminLayout>
+      );
+    }
+
+    if (normalizedPath === '/admin/pages') {
+      return (
+        <AdminLayout activeTab="pages">
+          <AdminPagesPage />
+        </AdminLayout>
+      );
+    }
+
+    if (normalizedPath === '/admin/releases') {
+      return (
+        <AdminLayout activeTab="releases">
+          <AdminReleasesPage />
+        </AdminLayout>
+      );
+    }
+
+    if (normalizedPath === '/admin/announcements') {
+      return (
+        <AdminLayout activeTab="announcements">
+          <AdminAnnouncementsPage />
+        </AdminLayout>
+      );
+    }
+
+    if (normalizedPath === '/admin/feedbacks') {
+      return (
+        <AdminLayout activeTab="feedbacks">
+          <AdminFeedbacksPage />
+        </AdminLayout>
+      );
+    }
+
+    if (normalizedPath === '/admin/activity-logs') {
+      return (
+        <AdminLayout activeTab="activity-logs">
+          <AdminActivityLogsPage />
+        </AdminLayout>
+      );
+    }
+
+    if (normalizedPath === '/admin/settings') {
+      return (
+        <AdminLayout activeTab="settings">
+          <AdminSettingsPage />
+        </AdminLayout>
+      );
+    }
+
+    // Default admin fallback to overview
+    return (
+      <AdminLayout activeTab="overview">
+        <AdminOverviewPage />
+      </AdminLayout>
+    );
+  }
+
+  // 2. PUBLIC ROUTING BRANCH
+  const renderPublicPage = () => {
+    switch (normalizedPath) {
+      case '/':
+      case '/home':
+        return (
+          <HomePage
+            currentLang={currentLang}
+            onLanguageChange={setCurrentLang}
+            onOpenInstructions={() => setIsInstallModalOpen(true)}
+            onOpenFeedback={() => setIsFeedbackModalOpen(true)}
+            onOpenChecklist={() => setIsChecklistModalOpen(true)}
+          />
+        );
+      case '/features':
+        return <FeaturesPage />;
+      case '/how-it-works':
+        return <HowItWorksPage />;
+      case '/download':
+        return <DownloadPage />;
+      case '/learn':
+      case '/safety':
+        return <LearnPage />;
+      case '/about':
+        return <AboutPage />;
+      case '/faq':
+        return <FaqPage />;
+      case '/contact':
+      case '/feedback':
+        return <ContactPage />;
+      case '/privacy':
+        return <PrivacyPage />;
+      case '/terms':
+        return <TermsPage />;
+      default:
+        return <NotFoundPage />;
     }
   };
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F5F8FC] text-slate-800 font-sans selection:bg-blue-600 selection:text-white">
-      {/* 1. Emergency Banner */}
+      {/* Citizen Emergency Cyber Advisory & 1930 Helpline Banner */}
       <EmergencyBanner currentLang={currentLang} />
 
-      {/* 2. Top Navigation */}
+      {/* Primary Sticky Navigation Header */}
       <Navbar
         currentLang={currentLang}
-        onLanguageChange={handleLanguageChange}
-        onOpenDownload={handleScrollToDownload}
+        onLanguageChange={setCurrentLang}
       />
 
+      {/* Main View Area */}
       <main className="flex-1">
-        {/* 3. Hero Section with Android Mockup */}
-        <HeroSection
-          currentLang={currentLang}
-          onLanguageChange={handleLanguageChange}
-          onOpenDownload={handleScrollToDownload}
-        />
-
-        {/* 4. APK Direct Download Section */}
-        <ApkDownloadSection
-          currentLang={currentLang}
-          onOpenInstructions={() => setIsInstallModalOpen(true)}
-        />
-
-        {/* 5. Problem and Threat Landscape */}
-        <ThreatLandscapeSection />
-
-        {/* 6. Feature Showcase */}
-        <FeatureShowcaseSection />
-
-        {/* 7. How SURAKSHA AI Works & Interactive Simulator */}
-        <HowItWorksSection />
-
-        {/* 8. App Preview Mockup Screens */}
-        <AppPreviewSection />
-
-        {/* 9. Language and Accessibility */}
-        <LanguageAccessibilitySection
-          currentLang={currentLang}
-          onLanguageChange={handleLanguageChange}
-        />
-
-        {/* 10. Responsible Safety and 1930 Helpline */}
-        <ResponsibleSafetySection />
-
-        {/* 11. About Project & Mission */}
-        <AboutProjectSection />
-
-        {/* 12. FAQ Section */}
-        <FaqSection />
-
-        {/* 13. Feedback & Safety Checklist Banner */}
-        <FeedbackBanner
-          onOpenFeedback={() => setIsFeedbackModalOpen(true)}
-          onOpenChecklist={() => setIsChecklistModalOpen(true)}
-        />
+        {renderPublicPage()}
       </main>
 
-      {/* 14. Footer */}
-      <Footer
-        onOpenDownload={handleScrollToDownload}
-        onOpenFeedback={() => setIsFeedbackModalOpen(true)}
-      />
+      {/* Standard Public Footer */}
+      <Footer />
 
-      {/* Modals & Dialogs */}
+      {/* Global Citizen Modals */}
       <InstallationModal
         isOpen={isInstallModalOpen}
         onClose={() => setIsInstallModalOpen(false)}
@@ -115,5 +188,13 @@ export default function App() {
         onClose={() => setIsChecklistModalOpen(false)}
       />
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <RouterProvider>
+      <AppContent />
+    </RouterProvider>
   );
 }

@@ -1,12 +1,15 @@
 import React from 'react';
-import { ShieldCheck, PhoneCall, ExternalLink, Heart, Globe } from 'lucide-react';
+import { ShieldCheck, PhoneCall, ExternalLink, Lock } from 'lucide-react';
+import { useRouter } from '../context/RouterContext';
 
-interface FooterProps {
-  onOpenDownload: () => void;
-  onOpenFeedback: () => void;
-}
+export const Footer: React.FC = () => {
+  const { navigate } = useRouter();
 
-export const Footer: React.FC<FooterProps> = ({ onOpenDownload, onOpenFeedback }) => {
+  const handleNav = (path: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    navigate(path);
+  };
+
   return (
     <footer className="bg-[#0B192C] text-slate-300 pt-16 pb-12 border-t border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -38,14 +41,14 @@ export const Footer: React.FC<FooterProps> = ({ onOpenDownload, onOpenFeedback }
 
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-slate-800/80 rounded-lg text-xs text-slate-400 border border-slate-700/80">
               <span className="w-2 h-2 rounded-full bg-emerald-400" />
-              <span>National Cyber Safety Initiative</span>
+              <span>National Cyber Safety Initiative · Hackathon Project</span>
             </div>
           </div>
 
           {/* Emergency Support Column */}
           <div className="lg:col-span-3 space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200">
-              Emergency Support
+              Emergency Response
             </h4>
             
             <div className="p-3 bg-red-950/40 rounded-xl border border-red-900/50 space-y-1.5">
@@ -57,7 +60,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenDownload, onOpenFeedback }
                 <PhoneCall className="w-4 h-4 fill-current" />
                 <span>Dial 1930</span>
               </a>
-              <div className="text-[10px] text-slate-400">Financial Cyber Fraud Helpline</div>
+              <div className="text-[10px] text-slate-400">Financial Cyber Fraud Helpline (24x7)</div>
             </div>
 
             <a
@@ -66,7 +69,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenDownload, onOpenFeedback }
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 text-xs text-blue-400 hover:text-blue-300 underline underline-offset-2 pt-1"
             >
-              <span>cybercrime.gov.in</span>
+              <span>cybercrime.gov.in (National Portal)</span>
               <ExternalLink className="w-3 h-3" />
             </a>
           </div>
@@ -74,25 +77,38 @@ export const Footer: React.FC<FooterProps> = ({ onOpenDownload, onOpenFeedback }
           {/* Platform Navigation */}
           <div className="lg:col-span-2 space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200">
-              Platform
+              Platform Pages
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
-                <a href="#features" className="hover:text-white transition-colors">Features & Diagnostics</a>
+                <a href="/" onClick={(e) => handleNav('/', e)} className="hover:text-white transition-colors">
+                  Home Overview
+                </a>
               </li>
               <li>
-                <a href="#how-it-works" className="hover:text-white transition-colors">Scam Scanner & URL Checker</a>
+                <a href="/features" onClick={(e) => handleNav('/features', e)} className="hover:text-white transition-colors">
+                  Scam Defense Features
+                </a>
               </li>
               <li>
-                <a href="#languages" className="hover:text-white transition-colors">Digital Safety Curriculum</a>
+                <a href="/how-it-works" onClick={(e) => handleNav('/how-it-works', e)} className="hover:text-white transition-colors">
+                  How It Works
+                </a>
               </li>
               <li>
-                <a href="#download" onClick={onOpenDownload} className="hover:text-white transition-colors">Download Android App</a>
+                <a href="/download" onClick={(e) => handleNav('/download', e)} className="hover:text-white transition-colors">
+                  Download Android APK
+                </a>
               </li>
               <li>
-                <button onClick={onOpenFeedback} className="hover:text-white transition-colors text-left">
-                  Share Feedback
-                </button>
+                <a href="/learn" onClick={(e) => handleNav('/learn', e)} className="hover:text-white transition-colors">
+                  Cyber Safety Portal
+                </a>
+              </li>
+              <li>
+                <a href="/faq" onClick={(e) => handleNav('/faq', e)} className="hover:text-white transition-colors">
+                  FAQ & Guidance
+                </a>
               </li>
             </ul>
           </div>
@@ -100,21 +116,33 @@ export const Footer: React.FC<FooterProps> = ({ onOpenDownload, onOpenFeedback }
           {/* Institutional / Legal */}
           <div className="lg:col-span-2 space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200">
-              Institutional
+              Institutional & Legal
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
-                <a href="#about" className="hover:text-white transition-colors">Hackathon Project Showcase</a>
+                <a href="/about" onClick={(e) => handleNav('/about', e)} className="hover:text-white transition-colors">
+                  About the Initiative
+                </a>
               </li>
               <li>
-                <a href="#safety" className="hover:text-white transition-colors">Privacy Safeguards</a>
+                <a href="/contact" onClick={(e) => handleNav('/contact', e)} className="hover:text-white transition-colors">
+                  Contact & Scam Reports
+                </a>
               </li>
               <li>
-                <span className="text-slate-500 cursor-not-allowed">Terms of Public Service</span>
+                <a href="/privacy" onClick={(e) => handleNav('/privacy', e)} className="hover:text-white transition-colors">
+                  Privacy Safeguards
+                </a>
               </li>
               <li>
-                <a href="https://cybercrime.gov.in" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">
-                  Report Scam (IRC 1930)
+                <a href="/terms" onClick={(e) => handleNav('/terms', e)} className="hover:text-white transition-colors">
+                  Terms of Public Use
+                </a>
+              </li>
+              <li className="pt-2 border-t border-slate-800">
+                <a href="/admin/login" onClick={(e) => handleNav('/admin/login', e)} className="text-slate-400 hover:text-white transition-colors flex items-center gap-1.5 font-medium">
+                  <Lock className="w-3 h-3 text-cyan-400" />
+                  <span>Admin Dashboard</span>
                 </a>
               </li>
             </ul>
