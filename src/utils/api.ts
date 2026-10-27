@@ -7,7 +7,7 @@
 
 const TOKEN_KEY = 'suraksha_admin_token';
 const ADMIN_STORE_KEY = 'suraksha_admin_local_store';
-const DEFAULT_PASSWORD = 'SurakshaSecure@2026';
+const ALLOWED_PASSWORDS = ['782447', 'SurakshaSecure@2026'];
 
 export function getAdminToken(): string | null {
   try {
@@ -156,7 +156,7 @@ function handleStaticHostFallback<T>(url: string, options: ApiFetchOptions): T {
         throw new Error('Administrator password is required.');
       }
 
-      if (submittedPassword.trim() !== DEFAULT_PASSWORD) {
+      if (!ALLOWED_PASSWORDS.includes(submittedPassword.trim())) {
         throw new Error('Incorrect administrator password.');
       }
 

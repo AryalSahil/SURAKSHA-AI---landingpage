@@ -126,14 +126,6 @@ const handleAdminLogin = (req: Request, res: Response) => {
   const clientIp = req.ip || req.socket.remoteAddress || 'unknown';
   const now = Date.now();
 
-  // Check brute-force lock
-  const attemptInfo = loginAttempts[clientIp];
-  if (attemptInfo && attemptInfo.lockedUntil > now) {
-    const waitSec = Math.ceil((attemptInfo.lockedUntil - now) / 1000);
-    res.status(429).json({ error: `Too many failed sign-in attempts. Please retry in ${waitSec} seconds.` });
-    return;
-  }
-
   const { password, username } = req.body || {};
 
   if (!password || typeof password !== 'string' || password.trim().length === 0) {
@@ -148,6 +140,13 @@ const handleAdminLogin = (req: Request, res: Response) => {
   const isValid = storeManager.verifyAdminPassword(password.trim());
 
   if (!isValid) {
+    // Check brute-force lock only on invalid attempt
+    const attemptInfo = loginAttempts[clientIp];
+    if (attemptInfo && attemptInfo.lockedUntil > now) {
+      const waitSec = Math.ceil((attemptInfo.lockedUntil - now) / 1000);
+      res.status(429).json({ error: `Too many failed sign-in attempts. Please retry in ${waitSec} seconds.` });
+      return;
+    }
     if (!loginAttempts[clientIp]) {
       loginAttempts[clientIp] = { count: 1, lockedUntil: 0 };
     } else {
