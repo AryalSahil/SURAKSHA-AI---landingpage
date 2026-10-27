@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Lock, User, AlertCircle, ArrowRight, KeyRound } from 'lucide-react';
+import { Lock, AlertCircle, ArrowRight, KeyRound } from 'lucide-react';
 import { useRouter } from '../../context/RouterContext';
 import { apiFetch, setAdminToken } from '../../utils/api';
 
 export const AdminLoginPage: React.FC = () => {
   const { navigate } = useRouter();
-  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -25,8 +24,8 @@ export const AdminLoginPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!username.trim() || !password) {
-      setError('Please provide both username and password.');
+    if (!password || !password.trim()) {
+      setError('Please enter the administrator password.');
       return;
     }
 
@@ -36,7 +35,7 @@ export const AdminLoginPage: React.FC = () => {
     try {
       const data = await apiFetch('/api/admin/login', {
         method: 'POST',
-        body: JSON.stringify({ username: username.trim(), password }),
+        body: JSON.stringify({ password: password.trim() }),
       });
 
       if (data?.token) {
@@ -46,12 +45,11 @@ export const AdminLoginPage: React.FC = () => {
       // Successful login - navigate to dashboard
       navigate('/admin');
     } catch (err: any) {
-      // User-friendly error message, avoiding low-level browser JSON exceptions
       const msg = err?.message || '';
       if (msg.includes('Unexpected end of JSON') || msg.includes('Failed to execute')) {
         setError('Connection interrupted. Please verify credentials and retry.');
       } else {
-        setError(msg || 'Unable to authenticate. Please check credentials.');
+        setError(msg || 'Incorrect administrator password.');
       }
     } finally {
       setSubmitting(false);
@@ -77,7 +75,7 @@ export const AdminLoginPage: React.FC = () => {
           </div>
           <h1 className="text-2xl font-bold text-white tracking-tight">SURAKSHA AI Console</h1>
           <p className="text-xs uppercase tracking-wider text-cyan-400 font-semibold mt-1">
-            Authorized Administrator Control Plane
+            Authorized Administrator Access
           </p>
         </div>
 
@@ -85,7 +83,7 @@ export const AdminLoginPage: React.FC = () => {
         <div className="bg-[#10233D]/90 backdrop-blur-xl border border-blue-800/40 rounded-2xl shadow-2xl p-7 sm:p-8">
           <div className="flex items-center gap-2 mb-6 pb-4 border-b border-blue-800/30">
             <Lock className="w-5 h-5 text-blue-400" />
-            <h2 className="text-lg font-semibold text-white">Sign In to Dashboard</h2>
+            <h2 className="text-lg font-semibold text-white">Enter Admin Password</h2>
           </div>
 
           {error && (
@@ -98,27 +96,7 @@ export const AdminLoginPage: React.FC = () => {
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">
-                Administrator Username
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                  <User className="w-4 h-4" />
-                </div>
-                <input
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  placeholder="admin"
-                  required
-                  autoComplete="username"
-                  className="w-full pl-10 pr-4 py-3 bg-[#0A192F]/80 border border-blue-900/60 rounded-xl text-white text-sm placeholder-slate-500 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">
-                Password
+                Administrator Password
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -128,8 +106,9 @@ export const AdminLoginPage: React.FC = () => {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••••••••••"
+                  placeholder="Enter administrator password..."
                   required
+                  autoFocus
                   autoComplete="current-password"
                   className="w-full pl-10 pr-4 py-3 bg-[#0A192F]/80 border border-blue-900/60 rounded-xl text-white text-sm placeholder-slate-500 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 />

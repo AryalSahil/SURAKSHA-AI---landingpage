@@ -328,10 +328,15 @@ class StoreManager {
     return this.store;
   }
 
-  public verifyAdminCredentials(username: string, pass: string): boolean {
-    if (this.store.adminUser.username !== username) {
+  public verifyAdminCredentials(username: string | undefined, pass: string): boolean {
+    if (username && username.trim() && this.store.adminUser.username !== username.trim()) {
       return false;
     }
+    const computed = hashPassword(pass, this.store.adminUser.salt);
+    return computed === this.store.adminUser.passwordHash;
+  }
+
+  public verifyAdminPassword(pass: string): boolean {
     const computed = hashPassword(pass, this.store.adminUser.salt);
     return computed === this.store.adminUser.passwordHash;
   }

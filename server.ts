@@ -20,6 +20,19 @@ app.set('trust proxy', 1);
 app.use(express.json());
 app.use(cookieParser());
 
+// Enable CORS and preflight support for API endpoints
+app.use((req: Request, res: Response, next: NextFunction) => {
+  res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(204);
+    return;
+  }
+  next();
+});
+
 // Rate limiter / attempt tracker in memory
 const loginAttempts: Record<string, { count: number; lockedUntil: number }> = {};
 
@@ -108,8 +121,8 @@ app.post('/api/public/feedback', (req: Request, res: Response) => {
 // SECURE ADMIN AUTHENTICATION ENDPOINTS
 // ----------------------------------------------------
 
-// 3. Admin Login
-app.post('/api/admin/login', (req: Request, res: Response) => {
+// 3. Admin Login (Requires only password; username defaults to admin)
+const handleAdminLogin = (req: Request, res: Response) => {
   const clientIp = req.ip || req.socket.remoteAddress || 'unknown';
   const now = Date.now();
 
@@ -121,14 +134,18 @@ app.post('/api/admin/login', (req: Request, res: Response) => {
     return;
   }
 
-  const { username, password } = req.body;
+  const { password, username } = req.body || {};
 
-  if (!username || !password) {
-    res.status(400).json({ error: 'Username and password are required.' });
+  if (!password || typeof password !== 'string' || password.trim().length === 0) {
+    res.status(400).json({ error: 'Administrator password is required.' });
     return;
   }
 
-  const isValid = storeManager.verifyAdminCredentials(username.trim(), password);
+  const effectiveUsername = (typeof username === 'string' && username.trim().length > 0) 
+    ? username.trim() 
+    : storeManager.getStore().adminUser.username;
+
+  const isValid = storeManager.verifyAdminPassword(password.trim());
 
   if (!isValid) {
     if (!loginAttempts[clientIp]) {
@@ -142,20 +159,20 @@ app.post('/api/admin/login', (req: Request, res: Response) => {
 
     storeManager.logActivity(
       'ADMIN_LOGIN_FAILED',
-      username,
-      `Failed credential attempt from IP: ${clientIp}`,
+      effectiveUsername,
+      `Failed access key attempt from IP: ${clientIp}`,
       'error',
       clientIp
     );
 
-    res.status(401).json({ error: 'Invalid administrator credentials.' });
+    res.status(401).json({ error: 'Incorrect administrator password.' });
     return;
   }
 
   // Clear attempts on success
   delete loginAttempts[clientIp];
 
-  const session = storeManager.createSession(username.trim());
+  const session = storeManager.createSession(effectiveUsername);
 
   // Set HTTP-only secure session cookie compatible with both standalone and iframe previews
   res.cookie('suraksha_admin_token', session.token, {
@@ -176,6 +193,12 @@ app.post('/api/admin/login', (req: Request, res: Response) => {
     token: session.token,
     expiresAt: session.expiresAt,
   });
+};
+
+app.post('/api/admin/login', handleAdminLogin);
+app.post('/admin/login', handleAdminLogin);
+app.get('/api/admin/login', (_req, res) => {
+  res.json({ status: 'active', message: 'SURAKSHA Admin Login endpoint. Please send POST request with password.' });
 });
 
 // 4. Admin Logout (Resilient: never fails if already unauthenticated)

@@ -6,7 +6,7 @@
     "salt": "ba4b00724c48621fce04d9aea49dec57",
     "role": "superadmin",
     "name": "SURAKSHA Security Lead",
-    "lastLoginAt": "2026-10-26T20:36:45.391Z"
+    "lastLoginAt": "2026-10-27T13:34:52.246Z"
   },
   "sessions": {
     "43a277e8c28523bbc0e53007d71df9181b2454dea24a870b11d3f2ce184e74f9": {
@@ -32,6 +32,30 @@
       "role": "superadmin",
       "createdAt": "2026-10-26T20:36:45.391Z",
       "expiresAt": "2026-10-27T04:36:45.391Z"
+    },
+    "82da93f8a2d7cdc10c38a902fe3a3971bcf36734a40e9694679b1c0d6e761094": {
+      "token": "82da93f8a2d7cdc10c38a902fe3a3971bcf36734a40e9694679b1c0d6e761094",
+      "userId": "admin-01",
+      "username": "admin",
+      "role": "superadmin",
+      "createdAt": "2026-10-27T13:18:10.523Z",
+      "expiresAt": "2026-10-27T21:18:10.523Z"
+    },
+    "b4ef5f20c325bf0be012f5e19b9bb2d859159f40b1e2e46750233ee91d1d7ccb": {
+      "token": "b4ef5f20c325bf0be012f5e19b9bb2d859159f40b1e2e46750233ee91d1d7ccb",
+      "userId": "admin-01",
+      "username": "admin",
+      "role": "superadmin",
+      "createdAt": "2026-10-27T13:33:50.939Z",
+      "expiresAt": "2026-10-27T21:33:50.939Z"
+    },
+    "208b385a78008dc70b6fa942eee715e13f5e0ca8578dcd27297608a3c6691ff1": {
+      "token": "208b385a78008dc70b6fa942eee715e13f5e0ca8578dcd27297608a3c6691ff1",
+      "userId": "admin-01",
+      "username": "admin",
+      "role": "superadmin",
+      "createdAt": "2026-10-27T13:34:52.246Z",
+      "expiresAt": "2026-10-27T21:34:52.246Z"
     }
   },
   "siteSettings": {
@@ -187,6 +211,39 @@
     }
   ],
   "activityLogs": [
+    {
+      "id": "log-1793108092246-omcmu",
+      "timestamp": "2026-10-27T13:34:52.246Z",
+      "action": "ADMIN_LOGIN",
+      "username": "admin",
+      "details": "Administrative sign-in established via secure cookie session.",
+      "status": "success"
+    },
+    {
+      "id": "log-1793108060505-7ly9d",
+      "timestamp": "2026-10-27T13:34:20.505Z",
+      "action": "ADMIN_LOGIN_FAILED",
+      "username": "admin",
+      "details": "Failed access key attempt from IP: 127.0.0.1",
+      "status": "error",
+      "ipAddress": "127.0.0.1"
+    },
+    {
+      "id": "log-1793108030939-pb1i3",
+      "timestamp": "2026-10-27T13:33:50.939Z",
+      "action": "ADMIN_LOGIN",
+      "username": "admin",
+      "details": "Administrative sign-in established via secure cookie session.",
+      "status": "success"
+    },
+    {
+      "id": "log-1793107090523-vx1yc",
+      "timestamp": "2026-10-27T13:18:10.523Z",
+      "action": "ADMIN_LOGIN",
+      "username": "admin",
+      "details": "Administrative sign-in established via secure cookie session.",
+      "status": "success"
+    },
     {
       "id": "log-1793047005391-6s3kw",
       "timestamp": "2026-10-26T20:36:45.391Z",
